@@ -1,1 +1,43 @@
+1. Пусть в таблице users поля created_at и updated_at оказались незаполненными. Заполните их текущими датой и временем.
+CREATE DATABASE vk3;
+USE vk3;
+CREATE TABLE users (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	first_name VARCHAR(100) NOT NULL,
+	last_name VARCHAR(100) NOT NULL,
+	email VARCHAR(150) NOT NULL,
+	phone VARCHAR(50) NOT NULL,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
+/*Выходим из MySQL и создаем на сайте Базу данных все кроме created_at и updated_at у них ставлю значение NULL*\
+
+UPDATE users SET:
+  created_at = NOW(),
+  updated_at = NOW();
+  
+2. Таблица users была неудачно спроектирована. Записи created_at и updated_at были заданы типом VARCHAR и в них долгое время помещались значения в формате 20.10.2017 8:10. Необходимо преобразовать поля к типу DATETIME, сохранив введённые ранее значения.
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255),
+  birthday_at DATE,
+  created_at VARCHAR(255),
+  updated_at VARCHAR(255)
+);
+UPDATE
+  users
+SET
+  created_at = STR_TO_DATE(created_at, '%d.%m.%Y %k:%i'),
+  updated_at = STR_TO_DATE(updated_at, '%d.%m.%Y %k:%i');
+
+ALTER TABLE
+  users
+CHANGE
+  created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE
+  users
+CHANGE
+  updated_at updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+  
