@@ -1,1 +1,87 @@
+1. Создать и заполнить таблицы лайков и постов.
+mysql> USE vk
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
 
+Database changed
+mysql> DROP TABLE IF EXISTS likes;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> CREATE TABLE likes (
+    ->   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ->   user_id INT UNSIGNED NOT NULL,
+    ->   target_id INT UNSIGNED NOT NULL,
+    ->   target_type_id INT UNSIGNED NOT NULL,
+    ->   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    -> );
+
+mysql> CREATE TABLE target_types (
+    ->   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ->   name VARCHAR(255) NOT NULL UNIQUE,
+    ->   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> 
+mysql> INSERT INTO target_types (name) VALUES 
+    ->   ('messages'),
+    ->   ('users'),
+    ->   ('media'),
+    ->   ('posts');
+mysql> INSERT INTO likes 
+    ->   SELECT 
+    ->     id, 
+    ->     FLOOR(1 + (RAND() * 100)), 
+    ->     FLOOR(1 + (RAND() * 100)),
+    ->     FLOOR(1 + (RAND() * 4)),
+    ->     CURRENT_TIMESTAMP 
+    ->   FROM messages;
+
+2. Создать все необходимые внешние ключи и диаграмму отношений.
+mysql> ALTER TABLE profiles
+    -> ADD CONSTRAINT profiles_user_id_fk
+    -> FOREIGN KEY (user_id) REFERENCES users(id)
+    -> ON DELETE CASCADE;
+mysql> ALTER TABLE profiles DROP FOREIGN KEY profiles_user_id_fk;
+mysql> ALTER TABLE messages
+    ->   ADD CONSTRAINT messages_from_user_id_fk 
+    ->     FOREIGN KEY (from_user_id) REFERENCES users(id),
+    ->   ADD CONSTRAINT messages_to_user_id_fk 
+    ->     FOREIGN KEY (to_user_id) REFERENCES users(id);
+
+3. Определить кто больше поставил лайков (всего) - мужчины или женщины?
+mysql> SELECT COUNT(*) AS likes, gender FROM likes, profiles WHERE likes.user_id = profiles.user_id GROUP BY gender;
+
+4. Подсчитать общее количество лайков десяти самым молодым пользователям (сколько лайков получили 10 самых молодых пользователей).
+mysql> SELECT * FROM likes  WHERE user_id IN ( SELECT * FROM ( SELECT user_id FROM profiles ORDER by birthday DESC LIMIT 10 ) as user_id  );
+
+5. Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети
+SELECT id, SUM(activite) as total_activite FROM (
+	SELECT * FROM (
+		(SELECT id,0 as activite FROM users WHERE id NOT IN (SELECT user_id FROM media GROUP by user_id))
+		UNION
+		(SELECT user_id as id, COUNT(*) as activite FROM media as m GROUP by user_id)
+	) as tmp_media
+	UNION ALL
+	SELECT * FROM (
+		(SELECT id,0 as activite FROM users WHERE id NOT IN (SELECT from_user_id FROM messages GROUP by from_user_id))
+		UNION
+		(SELECT from_user_id as id, COUNT(*) as activite FROM messages GROUP by from_user_id)
+	) as tmp_messages
+	UNION ALL
+	SELECT * FROM (
+		(SELECT id,0 as activite FROM users WHERE id NOT IN (SELECT user_id FROM posts GROUP by user_id))
+		UNION
+		(SELECT user_id as id, COUNT(*) as activite FROM posts GROUP by user_id)	
+	) as tmp_posts
+	UNION ALL
+	SELECT * FROM (
+		(SELECT id,0 as activite FROM users WHERE id NOT IN (SELECT user_id FROM likes GROUP by user_id))
+		UNION
+		(SELECT user_id as id, COUNT(*) as activite FROM likes GROUP by user_id)
+	) as tmp_likes	
+) as tmp_table
+GROUP by id
+ORDER by total_activite
+LIMIT 10
+;
