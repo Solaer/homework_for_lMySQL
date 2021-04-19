@@ -1,0 +1,30 @@
+1.Вевел таблицы лайков и постов 
+SELECT likes.*, target_types.* FROM likes CROSS JOIN target_types;
+2.-
+3. Определить кто больше поставил лайков (всего) - мужчины или женщины?
+SELECT profiles.gender, COUNT(likes.user_id) AS gender 
+  FROM profiles AS profiles
+    JOIN likes AS likes
+  ON profiles.user_id = likes.user_id
+  GROUP BY profiles.gender
+  ORDER BY gender DESC LIMIT 1;
+4. (не смог)
+5. Найти 10 пользователей, которые проявляют наименьшую активность в использовании социальной сети 
+SELECT
+  users.id,
+  CONCAT(first_name, ' ', last_name) AS user,
+  (COALESCE(likes_count, 0) + COALESCE(message_count, 0)) AS overall_activity
+FROM users
+LEFT JOIN (
+  SELECT user_id, COUNT(*) AS likes_count
+  FROM likes
+  GROUP BY user_id
+) likes_counts ON likes_counts.user_id = users.id
+LEFT JOIN (
+  SELECT from_user_id, COUNT(*) AS message_count
+  FROM messages
+  GROUP BY from_user_id
+) message_counts ON message_counts.from_user_id = users.id
+GROUP BY users.id
+ORDER BY overall_activity
+LIMIT 10;
