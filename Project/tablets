@@ -5,3 +5,13 @@ CREATE TABLE users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT "огда был создан аккаунт",
     prime CHAR(1) NOT NULL COMMENT "Показывает тип подписки где N - примиума нет, S - студенчиский тариф, P - премиум обычный, F - семейная подписка"
 ) COMMENT "данные о пользователе";
+
+CREATE TABLE profiles (
+	user_id INT UNSIGNED NOT NULL PRIMARY KEY,
+	name VARCHAR(25) NOT NULL COMMENT "тут уже будет то имя которое введет пользоваетль",
+	country VARCHAR(130),
+	gender CHAR(1) NOT NULL, 
+	birthday DATE,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
