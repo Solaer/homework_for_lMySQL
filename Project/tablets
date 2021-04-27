@@ -1,8 +1,9 @@
 CREATE TABLE users (
-    id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "id ользователя",
+    id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "id пользователя",
     user_name VARCHAR(25) NOT NULL COMMENT "имя пользователя будет состоять из уникального 25 значного кода состояшего из цифр и букв",
     email VARCHAR(100) NOT NULL UNIQUE COMMENT "электроная почта",
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT "огда был создан аккаунт",
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT "когда был создан аккаунт",
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     prime CHAR(1) NOT NULL COMMENT "Показывает тип подписки где N - примиума нет, S - студенчиский тариф, P - премиум обычный, F - семейная подписка"
 ) COMMENT "данные о пользователе";
 
@@ -15,3 +16,13 @@ CREATE TABLE profiles (
 	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+CREATE TABLE music (
+	id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	name VARCHAR(25) NOT NULL,
+	autro VARCHAR(25) NOT NULL COMMENT "Автор песен",
+	album VARCHAR(25) NOT NULL COMMENT "Альбом",
+	duration INT(3) NOT NULL COMMENT "Пролдолжительность песни",
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
