@@ -48,3 +48,5 @@ ALTER TABLE likes
  ADD CONSTRAINT likes_target_id_fk
    FOREIGN KEY (target_id) REFERENCES music(id)
      ON DELETE CASCADE;
+
+
