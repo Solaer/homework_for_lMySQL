@@ -3,3 +3,7 @@ ALTER TABLE profiles
     FOREIGN KEY (user_id) REFERENCES users(id)
       ON DELETE CASCADE;
       
+ALTER TABLE prime_status 
+	ADD CONSTRAINT prime_status_p_name_fk
+		FOREIGN KEY (p_name) REFERENCES users(prime)
+			ON DELETE CASCADE;
