@@ -3,7 +3,48 @@ ALTER TABLE profiles
     FOREIGN KEY (user_id) REFERENCES users(id)
       ON DELETE CASCADE;
       
-ALTER TABLE prime_status 
-	ADD CONSTRAINT prime_status_p_name_fk
-		FOREIGN KEY (p_name) REFERENCES users(prime)
+ALTER TABLE users 
+  ADD CONSTRAINT users_prime_fk
+    FOREIGN KEY (prime) REFERENCES prime_status(p_name)
+      ON DELETE CASCADE;
+
+ALTER TABLE music 
+	ADD CONSTRAINT music_gener_fk
+		FOREIGN KEY (gener) REFERENCES geners(name)
 			ON DELETE CASCADE;
+
+ALTER TABLE likes
+ ADD CONSTRAINT likes_user_id_fk
+   FOREIGN KEY (user_id) REFERENCES users(id)
+     ON DELETE CASCADE,
+ ADD CONSTRAINT likes_target_type_id_fk
+   FOREIGN KEY (target_type_id) REFERENCES target_types(id)
+     ON DELETE CASCADE;
+     
+ALTER TABLE music 
+ ADD CONSTRAINT music_album_fk
+   FOREIGN KEY (album) REFERENCES albums(name)
+     ON DELETE CASCADE,
+ ADD CONSTRAINT music_autro_fk
+   FOREIGN KEY (autro) REFERENCES autors(name)
+     ON DELETE CASCADE;
+
+ALTER TABLE albums 
+	ADD CONSTRAINT albums_musics_id_fk
+		FOREIGN KEY (musics_id) REFERENCES music(id)
+			ON DELETE CASCADE;
+
+ALTER TABLE autors 
+	ADD CONSTRAINT autors_music_id_fk
+		FOREIGN KEY (music_id) REFERENCES music(id)
+			ON DELETE CASCADE;
+			
+ALTER TABLE autors 
+	ADD CONSTRAINT autors_album_id_fk
+		FOREIGN KEY (album_id) REFERENCES albums(id)
+			ON DELETE CASCADE;
+			
+ALTER TABLE likes
+ ADD CONSTRAINT likes_target_id_fk
+   FOREIGN KEY (target_id) REFERENCES music(id)
+     ON DELETE CASCADE;
