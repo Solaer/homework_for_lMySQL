@@ -49,4 +49,15 @@ ALTER TABLE likes
    FOREIGN KEY (target_id) REFERENCES music(id)
      ON DELETE CASCADE;
 
+ALTER TABLE subscrise 
+  ADD CONSTRAINT subscrise_user_id_community_id_fk
+    FOREIGN KEY (user_id) REFERENCES users(id)
+      ON DELETE CASCADE,
+  ADD CONSTRAINT subscrise_autors_id_fk
+    FOREIGN KEY (autors_id) REFERENCES autors(id)
+      ON DELETE CASCADE;
 
+ALTER TABLE albums 
+	ADD CONSTRAINT albums_name_id_fk
+		FOREIGN KEY (aurto) REFERENCES autors(name)
+			ON DELETE CASCADE;
