@@ -49,7 +49,7 @@ CREATE TABLE autors (
 	subscride INT(10) NOT NULL
 );
 
-CREATE TABLE likes (
+CREATE TABLE likes_music (
 	id INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	user_id INT UNSIGNED NOT NULL,
 	target_id INT UNSIGNED NOT NULL,
@@ -57,10 +57,11 @@ CREATE TABLE likes (
   	created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE target_types (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(255) NOT NULL UNIQUE,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE likes_albums (
+	id int auto_increment NOT NULL primary key,
+	user_id int NOT NULL,
+	target_id int NOT NULL,
+	created_at datetime DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE geners (
