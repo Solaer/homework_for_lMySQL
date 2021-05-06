@@ -1,0 +1,41 @@
+"90% процентов этой таблицы было заполнено при помоши сайта http://filldb.info/ поэтому так мало кодового наполенения"
+INSERT INTO likes_albums 
+  SELECT 
+    NULL ,
+    FLOOR(1 + (RAND() * 20)), 
+    FLOOR(1 + (RAND() * 100)),
+    NOW() ;
+
+INSERT INTO likes_music 
+  SELECT 
+    NULL ,
+    FLOOR(1 + (RAND() * 20)), 
+    FLOOR(1 + (RAND() * 25)),
+    NOW() ;
+    
+INSERT INTO likes_albums 
+  SELECT 
+    NULL ,
+    FLOOR(1 + (RAND() * 20)), 
+    FLOOR(1 + (RAND() * 10)),
+    NOW() ;
+    
+INSERT INTO geners (name) VALUES 
+  ('Поп'),
+  ('Джаз'),
+  ('Рок'),
+  ('Электроника'),
+  ('Классика'),
+  ('Панк'),
+  ('Рок-н-ролл'),
+  ('Техно'),
+  ('Реп'),
+  ('Хард-рок'),
+  ('Шансон'),
+  ('Металл');
+
+INSERT INTO prime_status (name) VALUES
+  ('N'),
+  ('P'),
+  ('S'),
+  ('F');
